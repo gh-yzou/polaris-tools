@@ -34,7 +34,6 @@ import { CatalogDetails } from "@/pages/CatalogDetails"
 import { NamespaceDetails } from "@/pages/NamespaceDetails"
 import { AccessControl } from "@/pages/AccessControl"
 import { TableDetails } from "@/pages/TableDetails"
-import { ChatWidget } from "@/components/layout/ChatWidget"
 
 function ThemedToaster() {
   const { effectiveTheme } = useTheme()
@@ -79,7 +78,6 @@ function App() {
               <EmbeddedPanel />
             </BrowserRouter>
             <ThemedToaster />
-            <ChatWidget />
           </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>

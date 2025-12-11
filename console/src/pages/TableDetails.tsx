@@ -32,6 +32,7 @@ import { MetadataViewer } from "@/components/table/MetadataViewer"
 import { RenameTableModal } from "@/components/forms/RenameTableModal"
 import { EditTablePropertiesModal } from "@/components/forms/EditTablePropertiesModal"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useEffect } from "react";
 
 export function TableDetails() {
   const { catalogName, namespace: namespaceParam, tableName } = useParams<{
@@ -78,6 +79,17 @@ export function TableDetails() {
   const currentSchema = tableData?.metadata.schemas.find(
     (s) => s["schema-id"] === tableData.metadata["current-schema-id"]
   )
+
+  // Auto-refresh every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      tableQuery.refetch();
+      namespaceQuery.refetch();
+      catalogQuery.refetch();
+    }, 1000); // 1 seconds
+
+    return () => clearInterval(interval);
+  }, [tableQuery, namespaceQuery, catalogQuery]);
 
   return (
     <div className="p-6 md:p-8 space-y-6 overflow-y-auto">

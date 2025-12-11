@@ -67,6 +67,7 @@ import {
 import type { SortingState } from "@tanstack/react-table"
 import { CreateCatalogRoleModal } from "@/components/forms/CreateCatalogRoleModal"
 import { GrantCatalogRoleModal } from "@/components/forms/GrantCatalogRoleModal"
+import { useEffect } from "react"
 
 const columnHelper = createColumnHelper<CatalogRole & { principalRolesCount?: number }>()
 
@@ -272,6 +273,14 @@ export function CatalogRolesTab() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      catalogRolesQueries.refetch();
+    }, 1000); // 60 seconds, change as needed
+
+    return () => clearInterval(interval);
+  }, [catalogRolesQueries]);
 
   return (
     <div className="space-y-6">

@@ -61,6 +61,7 @@ import type { SortingState } from "@tanstack/react-table"
 import { EditPrincipalModal } from "@/components/forms/EditPrincipalModal"
 import { CredentialsModal } from "@/components/forms/CredentialsModal"
 import { PrincipalDetailsModal } from "@/components/users/PrincipalDetailsModal"
+import { useEffect } from "react";
 
 const columnHelper = createColumnHelper<Principal>()
 
@@ -307,6 +308,15 @@ export function PrincipalsTab() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      principalsQuery.refetch();
+    }, 1000); // 1s interval
+
+    return () => clearInterval(interval);
+  }, [principalsQuery]);
+
 
   return (
     <div className="space-y-6">

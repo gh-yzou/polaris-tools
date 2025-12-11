@@ -38,6 +38,7 @@ import { formatDistanceToNow } from "date-fns"
 import { useState } from "react"
 import { EditCatalogModal } from "@/components/forms/EditCatalogModal"
 import { CreateNamespaceModal } from "@/components/forms/CreateNamespaceModal"
+import { useEffect } from "react";
 
 export function CatalogDetails() {
   const { catalogName } = useParams<{ catalogName: string }>()
@@ -71,6 +72,15 @@ export function CatalogDetails() {
   }
 
   const defaultBaseLocation = catalog?.properties?.["default-base-location"] || "Not set"
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      catalogQuery.refetch();
+      namespacesQuery.refetch();
+    }, 1000); // refresh every 60s
+
+    return () => clearInterval(interval);
+  }, [catalogQuery, namespacesQuery]);
 
   return (
     <div className="p-6 md:p-8 space-y-6 overflow-y-auto">

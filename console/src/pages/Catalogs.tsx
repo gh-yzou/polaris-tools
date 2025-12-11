@@ -61,6 +61,7 @@ import { CreateCatalogModal } from "@/components/forms/CreateCatalogModal"
 import { CatalogExplorer } from "@/components/catalog/CatalogExplorer"
 import { formatDistanceToNow } from "date-fns"
 import { cn } from "@/lib/utils"
+import { useEffect } from "react";
 
 const columnHelper = createColumnHelper<Catalog>()
 
@@ -187,6 +188,15 @@ export function Catalogs() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
+
+  // ⏱ Auto-refetch every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      catalogsQuery.refetch();
+    }, 1000); // 60s
+
+    return () => clearInterval(interval);
+  }, [catalogsQuery]);
 
   return (
     <div className="flex h-full overflow-hidden">

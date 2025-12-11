@@ -25,6 +25,7 @@ import { ThemeProvider, useTheme } from "@/hooks/useTheme"
 import { Layout } from "@/components/layout/Layout"
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute"
 import { ErrorBoundary } from "@/components/ErrorBoundary"
+import { EmbeddedPanel } from "@/components/layout/EmbeddedPanel"
 import { Login } from "@/pages/Login"
 import { Home } from "@/pages/Home"
 import { Connections } from "@/pages/Connections"
@@ -75,6 +76,7 @@ function App() {
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
+              <EmbeddedPanel />
             </BrowserRouter>
             <ThemedToaster />
             <ChatWidget />

@@ -46,6 +46,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { useEffect } from "react";
 
 export function NamespaceDetails() {
   const { catalogName, namespace: namespaceParam } = useParams<{
@@ -175,6 +176,25 @@ export function NamespaceDetails() {
 
   const namespacePath = namespaceArray.join(".")
   const location = namespace?.properties?.location || "Not set"
+
+  // auto-refresh every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      namespaceQuery.refetch();
+      tablesQuery.refetch();
+      catalogQuery.refetch();
+      childrenNamespacesQuery.refetch();
+      polarisGenericTablesQuery.refetch();
+    }, 1000); // 1s
+
+    return () => clearInterval(interval);
+  }, [
+    namespaceQuery,
+    tablesQuery,
+    catalogQuery,
+    childrenNamespacesQuery,
+    polarisGenericTablesQuery
+  ]);
 
   return (
     <div className="p-6 md:p-8 space-y-6 overflow-y-auto">

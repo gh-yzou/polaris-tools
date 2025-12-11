@@ -60,6 +60,7 @@ import {
 import type { SortingState } from "@tanstack/react-table"
 import { CreatePrincipalRoleModal } from "@/components/forms/CreatePrincipalRoleModal"
 import { GrantRoleModal } from "@/components/forms/GrantRoleModal"
+import { useEffect } from "react";
 
 const columnHelper = createColumnHelper<PrincipalRole & { principalsCount?: number }>()
 
@@ -228,6 +229,14 @@ export function PrincipalRolesTab() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      rolesQuery.refetch();
+    }, 1000); // 60 seconds — change as needed
+
+    return () => clearInterval(interval);
+  }, [rolesQuery]);
 
   return (
     <div className="space-y-6">

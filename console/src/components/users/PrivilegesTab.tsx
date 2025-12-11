@@ -95,6 +95,7 @@ function formatEntityPath(grant: GrantResource): string {
         : grant.policyName
   }
 }
+import { useEffect } from "react";
 
 // Helper function to get privilege name (for display)
 function getPrivilegeName(privilege: string): string {
@@ -411,6 +412,15 @@ export function PrivilegesTab() {
     queryClient.invalidateQueries({ queryKey: ["catalog-roles"] })
     queryClient.invalidateQueries({ queryKey: ["grants"] })
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      grantsQuery.refetch();
+      catalogRolesQuery.refetch();
+    }, 60000); // 60 sec
+
+    return () => clearInterval(interval);
+  }, [grantsQuery, catalogRolesQuery]);
 
   return (
     <TooltipProvider>

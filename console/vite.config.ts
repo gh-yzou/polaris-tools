@@ -31,6 +31,26 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/api/proxy': {
+        target: process.env.VITE_POLARIS_API_URL || 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+        configure: (proxy) => {
+          // Only log in development mode
+          if (process.env.NODE_ENV === 'development') {
+            proxy.on('error', (err) => {
+              console.error('Proxy error:', err);
+            });
+            proxy.on('proxyReq', (proxyReq, req) => {
+              const target = process.env.VITE_POLARIS_API_URL || 'http://localhost:3000';
+              console.log('📤 Proxying:', req.method, req.url, '→', target + proxyReq.path);
+            });
+            proxy.on('proxyRes', (proxyRes, req) => {
+              console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+            });
+          }
+        },
+      },
       '/api': {
         target: process.env.VITE_POLARIS_API_URL || 'http://localhost:8181',
         changeOrigin: true,

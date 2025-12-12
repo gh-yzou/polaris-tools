@@ -17,22 +17,27 @@
  * under the License.
  */
 
+import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import { Sidebar } from "./Sidebar"
 import { Header } from "./Header"
 import { Footer } from "./Footer"
+import { ChatPanel } from "./ChatPanel"
 
 export function Layout() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header />
+      <div className="flex flex-1 flex-col overflow-hidden transition-all duration-300">
+        <Header onToggleChat={() => setIsChatOpen(!isChatOpen)} isChatOpen={isChatOpen} />
         <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
         <Footer />
       </div>
+      <ChatPanel isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   )
 }

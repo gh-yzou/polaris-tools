@@ -18,7 +18,7 @@
  */
 
 import { useState, useEffect } from "react"
-import { LogOut, ChevronDown, Sun, Moon, Monitor } from "lucide-react"
+import { LogOut, ChevronDown, Sun, Moon, Monitor, MessageSquare } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { useTheme } from "@/hooks/useTheme"
@@ -32,7 +32,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 
-export function Header() {
+interface HeaderProps {
+  onToggleChat: () => void
+  isChatOpen: boolean
+}
+
+export function Header({ onToggleChat, isChatOpen }: HeaderProps) {
   const { logout } = useAuth()
   const { principal, principalRoles, loading } = useCurrentUser()
   const { theme, setTheme } = useTheme()
@@ -70,7 +75,7 @@ export function Header() {
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-background px-6">
-      {/* Theme Toggle - Left Side */}
+      {/* Left Side - Theme Toggle */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -102,8 +107,24 @@ export function Header() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* User Profile with Dropdown - Right Side */}
-      <DropdownMenu>
+      {/* Right Side - Chat Toggle & User Profile */}
+      <div className="flex items-center gap-2">
+        {/* Chat Toggle Button */}
+        <Button
+          variant={isChatOpen ? "default" : "ghost"}
+          size="icon"
+          onClick={onToggleChat}
+          className="h-9 w-9 relative"
+        >
+          <MessageSquare className="h-5 w-5" />
+          <span className="sr-only">Toggle chat assistant</span>
+          {!isChatOpen && (
+            <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
+          )}
+        </Button>
+
+        {/* User Profile with Dropdown */}
+        <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-3 rounded-md px-2 py-1.5 hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
@@ -132,6 +153,7 @@ export function Header() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      </div>
     </header>
   )
 }

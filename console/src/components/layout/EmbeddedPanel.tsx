@@ -18,10 +18,9 @@
  */
 
 import { useState } from "react"
-import { ExternalLink, PanelLeftClose, PanelLeftOpen } from "lucide-react"
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
-const EMBED_URL = "http://localhost:8502?subagent=polaris"
+import { ChatInterface } from "@/components/chat/ChatInterface"
 
 export function EmbeddedPanel() {
   const [isOpen, setIsOpen] = useState(false)
@@ -29,32 +28,17 @@ export function EmbeddedPanel() {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
       {isOpen && (
-        <div className="w-[400px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] rounded-lg border bg-background shadow-2xl overflow-hidden">
-          <div className="flex items-center justify-between border-b bg-muted/50 px-3 py-2">
+        <div className="w-[400px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] rounded-lg border bg-background shadow-2xl overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between border-b bg-muted/50 px-3 py-2 shrink-0">
             <div className="text-sm font-medium">Polaris Assistant</div>
-            <div className="flex items-center gap-1">
-              <a
-                href={EMBED_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Open full
-              </a>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsOpen(false)}>
-                <PanelLeftClose className="h-4 w-4" />
-                <span className="sr-only">Hide Polaris assistant</span>
-              </Button>
-            </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsOpen(false)}>
+              <PanelLeftClose className="h-4 w-4" />
+              <span className="sr-only">Hide Polaris assistant</span>
+            </Button>
           </div>
-          <iframe
-            title="Polaris embedded panel"
-            src={EMBED_URL}
-            className="w-full border-0"
-            style={{ height: "calc(100% - 44px)" }}
-            allow="clipboard-read; clipboard-write"
-          />
+          <div className="flex-1 overflow-hidden">
+            <ChatInterface />
+          </div>
         </div>
       )}
       <Button
@@ -65,7 +49,7 @@ export function EmbeddedPanel() {
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {isOpen ? <PanelLeftClose className="mr-2 h-4 w-4" /> : <PanelLeftOpen className="mr-2 h-4 w-4" />}
-        {isOpen ? "Hide Polaris panel" : "Open Polaris panel"}
+        {isOpen ? "Hide Polaris assistant" : "Open Polaris assistant"}
       </Button>
     </div>
   )

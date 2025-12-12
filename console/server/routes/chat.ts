@@ -89,7 +89,7 @@ router.post('/message', async (req, res) => {
 
         // Use finalMessage to get the complete response
         const finalMessage = await client.messages.create({
-          model: 'claude-sonnet-4-5-20250929',
+          model: 'claude-opus-4-5',
           max_tokens: 4096,
           messages: messages.map(msg => ({
             role: msg.role,
@@ -163,7 +163,7 @@ router.post('/message', async (req, res) => {
           // Get next response from Claude with streaming
           console.log('Continuing conversation with tool results');
           const nextStream = await client.messages.stream({
-            model: 'claude-sonnet-4-5-20250929',
+            model: 'claude-opus-4-5',
             max_tokens: 4096,
             messages: conversationMessages,
             tools: tools,
@@ -231,7 +231,7 @@ router.post('/message', async (req, res) => {
       // Non-streaming response
       const client = getAnthropicClient();
       const response = await client.messages.create({
-        model: 'claude-sonnet-4-5-20250929',
+        model: 'claude-opus-4-5',
         max_tokens: 4096,
         messages: messages.map(msg => ({
           role: msg.role,
@@ -255,7 +255,7 @@ router.post('/message', async (req, res) => {
 
           // Continue conversation with tool result
           finalResponse = await client.messages.create({
-            model: 'claude-sonnet-4-5-20250929',
+            model: 'claude-opus-4-5',
             max_tokens: 4096,
             messages: [
               ...messages.map(msg => ({

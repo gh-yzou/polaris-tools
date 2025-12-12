@@ -189,14 +189,16 @@ export function Catalogs() {
     getSortedRowModel: getSortedRowModel(),
   })
 
-  // ⏱ Auto-refetch every 60 seconds
+  // ⏱ Auto-refetch every 2 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      catalogsQuery.refetch();
-    }, 1000); // 60s
+      queryClient.invalidateQueries({ queryKey: ["catalogs"] })
+      queryClient.invalidateQueries({ queryKey: ["namespaces"] })
+      queryClient.invalidateQueries({ queryKey: ["tables"] })
+    }, 2000); // 2s
 
     return () => clearInterval(interval);
-  }, [catalogsQuery]);
+  }, [queryClient]);
 
   return (
     <div className="flex h-full overflow-hidden">
@@ -229,8 +231,16 @@ export function Catalogs() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <Button variant="secondary" onClick={() => catalogsQuery.refetch()} disabled={catalogsQuery.isFetching}>
-                <RefreshCw className="mr-2 h-4 w-4" />
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  queryClient.invalidateQueries({ queryKey: ["catalogs"] })
+                  queryClient.invalidateQueries({ queryKey: ["namespaces"] })
+                  queryClient.invalidateQueries({ queryKey: ["tables"] })
+                }}
+                disabled={catalogsQuery.isFetching}
+              >
+                <RefreshCw className={cn("mr-2 h-4 w-4", catalogsQuery.isFetching && "animate-spin")} />
                 Refresh
               </Button>
               <Button onClick={() => setIsCreateOpen(true)}>
